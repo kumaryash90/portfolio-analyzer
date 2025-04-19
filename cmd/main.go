@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/kumaryash90/portfolio-analyzer/internal/csvparser"
+	"github.com/kumaryash90/portfolio-analyzer/internal/screener"
 )
 
 func main() {
@@ -23,4 +25,11 @@ func main() {
 	for _, h := range holdings {
 		fmt.Printf("%+v\n", h)
 	}
+
+	detail, err := screener.ScrapeFundamentals("TCS")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(detail)
 }
