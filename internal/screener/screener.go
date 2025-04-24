@@ -9,6 +9,10 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+var screenerSymbolMap = map[string]string{ // TODO: remove this. auto-resolve ID.
+	"MISHTANN": "539594",
+}
+
 type HoldingDetail struct {
 	Symbol       string
 	ROCE         string
@@ -18,6 +22,11 @@ type HoldingDetail struct {
 }
 
 func ScrapeFundamentals(symbol string) (HoldingDetail, error) {
+	symbol = strings.ToUpper(strings.TrimSpace(symbol))
+	if mapped, ok := screenerSymbolMap[symbol]; ok {
+		symbol = mapped
+	}
+
 	url := fmt.Sprintf("https://www.screener.in/company/%s/consolidated", strings.ToUpper(symbol))
 
 	req, err := http.NewRequest("GET", url, nil)

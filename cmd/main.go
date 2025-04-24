@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"github.com/kumaryash90/portfolio-analyzer/internal/csvparser"
-	"github.com/kumaryash90/portfolio-analyzer/internal/screener"
 )
 
 func main() {
@@ -16,7 +14,7 @@ func main() {
 	}
 
 	path := os.Args[1]
-	holdings, err := csvparser.ParseHoldingCSV(path)
+	holdings, err := csvparser.ParseHoldingsCSV(path)
 
 	if err != nil {
 		fmt.Println("Error parsing csv: ", err)
@@ -25,11 +23,11 @@ func main() {
 	for _, h := range holdings {
 		fmt.Printf("%+v\n", h)
 	}
+	println()
 
-	detail, err := screener.ScrapeFundamentals("TCS")
-	if err != nil {
-		log.Fatal(err)
+	enriched := csvparser.MergeHoldingsWithDetails(holdings)
+
+	for _, e := range enriched {
+		fmt.Printf("%+v\n", e)
 	}
-
-	fmt.Println(detail)
 }
